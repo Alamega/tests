@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ежедневный Мега-Тест: IQ + ПДД</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Экран самого теста -->
+      <div id="quiz-screen">
+        <h1>IQ & ПДД Микс-Тест</h1>
+        <div class="progress-bar">
+          <div class="progress" id="progress"></div>
+        </div>
+
+        <div id="question-container">
+          <!-- Вопросы рендерятся из скрипта -->
+        </div>
+
+        <button id="next-btn" class="btn" disabled>Далее</button>
+      </div>
+
+      <!-- Экран результатов -->
+      <div id="result-screen">
+        <h1 id="result-title">Тест завершен!</h1>
+        <div id="already-passed-msg" class="info-msg" style="display: none">Вы уже проходили этот тест сегодня. Вот ваш результат:</div>
+
+        <div class="score-summary">
+          <p>Правильных ответов: <span class="score-count text-success" id="correct-count">0</span></p>
+          <p>Неправильных ответов: <span class="score-count text-error" id="incorrect-count">0</span></p>
+        </div>
+
+        <div class="wrong-answers-section" id="errors-section" style="display: none">
+          <div class="wrong-answers-title">Нажмите на ошибку, чтобы посмотреть разбор:</div>
+          <div id="wrong-answers-list">
+            <!-- Сюда упадут ошибки -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
