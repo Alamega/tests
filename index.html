@@ -3,27 +3,41 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ежедневный Мега-Тест: IQ + ПДД</title>
+    <title>Мега-Тест Платформа</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="container">
-      <!-- Экран самого теста -->
-      <div id="quiz-screen">
-        <h1>IQ & ПДД Микс-Тест</h1>
+      <!-- ЭКРАН ВЫБОРА ТЕСТА -->
+      <div id="menu-screen">
+        <h1>Выберите тест на сегодня</h1>
+        <p class="menu-subtitle">Каждый тест можно пройти только один раз в день</p>
+        <div class="test-buttons-list">
+          <!-- Кнопки загружаются из скрипта с проверкой статуса (пройдено/нет) -->
+          <button class="btn menu-btn" onclick="startTest('iq_test.json')">🧠 Тест на IQ</button>
+          <button class="btn menu-btn" onclick="startTest('pdd_test.json')">🚗 Тест по ПДД</button>
+        </div>
+      </div>
+
+      <!-- ЭКРАН САМОГО ТЕСТА -->
+      <div id="quiz-screen" style="display: none">
+        <div class="quiz-header">
+          <button class="back-btn" onclick="goToMenu()">⬅ В меню</button>
+          <h1 id="quiz-title">Загрузка...</h1>
+        </div>
         <div class="progress-bar">
           <div class="progress" id="progress"></div>
         </div>
 
         <div id="question-container">
-          <!-- Вопросы рендерятся из скрипта -->
+          <!-- Вопросы рендерятся динамически -->
         </div>
 
         <button id="next-btn" class="btn" disabled>Далее</button>
       </div>
 
-      <!-- Экран результатов -->
-      <div id="result-screen">
+      <!-- ЭКРАН РЕЗУЛЬТАТОВ -->
+      <div id="result-screen" style="display: none">
         <h1 id="result-title">Тест завершен!</h1>
         <div id="already-passed-msg" class="info-msg" style="display: none">Вы уже проходили этот тест сегодня. Вот ваш результат:</div>
 
@@ -38,6 +52,8 @@
             <!-- Сюда упадут ошибки -->
           </div>
         </div>
+
+        <button class="btn" style="margin-top: 25px; background-color: #2c3e50" onclick="goToMenu()">Вернуться в меню</button>
       </div>
     </div>
 

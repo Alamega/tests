@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Шифратор тестов в JSON</title>
+    <style>
+      body {
+        font-family: "Segoe UI", system-ui, sans-serif;
+        background: #f4f7f6;
+        padding: 30px;
+        color: #333;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+      h2 {
+        margin-top: 0;
+        color: #2c3e50;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+      input[type="text"],
+      textarea {
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #e2e8f0;
+        border-radius: 6px;
+        box-sizing: border-box;
+        font-size: 14px;
+      }
+      textarea {
+        height: 180px;
+        font-family: monospace;
+      }
+      .btn {
+        background: #4a90e2;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .btn:hover {
+        background: #357abd;
+      }
+      .output-box {
+        margin-top: 20px;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Генератор зашифрованных JSON-тестов</h2>
+
+      <div class="form-group">
+        <label for="test-title">Название теста:</label>
+        <input type="text" id="test-title" value="Тест по правилам ПДД" />
+      </div>
+
+      <div class="form-group">
+        <label for="questions-input">Вставьте ваши вопросы в формате JavaScript-массива:</label>
+        <textarea id="questions-input">
+[
+  {
+    "category": "pdd",
+    "question": "Что означает мигающий зеленый сигнал светофора?",
+    "options": [
+      "Запрещает движение", 
+      "Разрешает движение и информирует, что время его действия истекает", 
+      "Обязывает уступить дорогу встречному транспорту"
+    ],
+    "correct": 1,
+    "explanation": "Мигающий зеленый разрешает движение и сообщает, что вскоре включится запрещающий сигнал."
+  },
+  {
+    "category": "iq",
+    "question": "Какое число должно быть следующим: 2, 4, 8...",
+    "options": ["10", "12", "16", "20"],
+    "correct": 2,
+    "explanation": "Каждое число увеличивается в 2 раза."
+  }
+]</textarea
+        >
+      </div>
+
+      <button class="btn" onclick="generateJSON()">Зашифровать и скачать JSON</button>
+
+      <div class="output-box" id="output-box">
+        <label>Готовый зашифрованный код (он же автоматически скачался):</label>
+        <textarea id="json-output" readonly></textarea>
+      </div>
+    </div>
+
+    <script>
+      function generateJSON() {
+        const title = document.getElementById("test-title").value;
+        const rawQuestionsText = document.getElementById("questions-input").value;
+
+        try {
+          // Парсим введенный пользователем массив
+          const rawQuestions = JSON.parse(rawQuestionsText);
+
+          // Мапим вопросы: убираем 'correct' и создаем зашифрованный 'token'
+          const secureQuestions = rawQuestions.map((q) => {
+            if (q.correct === undefined) {
+              throw new Error(`В одном из вопросов отсутствует поле "correct"`);
+            }
+
+            // Кодируем индекс правильного ответа в Base64
+            const token = btoa(q.correct.toString());
+
+            // Собираем новый объект вопроса БЕЗ поля correct
+            const secureQuestion = {
+              category: q.category || "general",
+              question: q.question,
+              options: q.options,
+              token: token,
+              explanation: q.explanation || "Разбор этого вопроса отсутствует.",
+            };
+
+            return secureQuestion;
+          });
+
+          // Формируем итоговую структуру файла
+          const finalJSON = {
+            title: title,
+            questions: secureQuestions,
+          };
+
+          const jsonString = JSON.stringify(finalJSON, null, 2);
+
+          // Выводим результат на экран
+          document.getElementById("json-output").value = jsonString;
+          document.getElementById("output-box").style.display = "block";
+
+          // Автоматическое скачивание файла в браузер
+          const blob = new Blob([jsonString], { type: "application/json" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+
+          // Формируем имя файла (например, pdd_test.json)
+          let filename =
+            title
+              .toLowerCase()
+              .replace(/[^a-zа-я0-9]/g, "_")
+              .replace(/__+/g, "_") + ".json";
+
+          a.href = url;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        } catch (e) {
+          alert("Ошибка в формате вопросов! Убедитесь, что это правильный JSON.\n\nДетали: " + e.message);
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -36,6 +36,72 @@ h1 {
   font-size: 24px;
 }
 
+.menu-subtitle {
+  text-align: center;
+  color: #7f8c8d;
+  margin-bottom: 25px;
+}
+
+.test-buttons-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.menu-btn {
+  background-color: #ffffff;
+  color: #2c3e50;
+  border: 2px solid #e2e8f0;
+  text-align: left;
+  padding: 20px;
+  font-size: 18px;
+  transition: all 0.2s;
+}
+
+.menu-btn:hover {
+  background-color: #f8fafc;
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+/* Стилизация кнопки, если тест пройден */
+.menu-btn.passed {
+  border-color: var(--success-color);
+  background-color: #f0fdf4;
+}
+.menu-btn.passed::after {
+  content: " (Пройден ✅)";
+  font-size: 14px;
+  color: var(--success-color);
+  font-weight: normal;
+}
+
+.quiz-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.quiz-header h1 {
+  margin: 0 auto;
+}
+
+.back-btn {
+  position: absolute;
+  left: 0;
+  background: none;
+  border: none;
+  color: #7f8c8d;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.back-btn:hover {
+  color: #2c3e50;
+}
+
 .progress-bar {
   height: 6px;
   background-color: #e0e0e0;
@@ -52,10 +118,6 @@ h1 {
 }
 
 .question-card {
-  display: none;
-}
-
-.question-card.active {
   display: block;
 }
 
@@ -134,12 +196,6 @@ h1 {
 .btn:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
-}
-
-/* Экран результатов */
-#result-screen {
-  display: none;
-  text-align: center;
 }
 
 .info-msg {
